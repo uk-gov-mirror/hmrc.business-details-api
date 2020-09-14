@@ -22,6 +22,7 @@ import support.UnitSpec
 class RetrieveBusinessDetailsAuditDetailSpec extends UnitSpec {
 
   val nino = "ZG903729C"
+  val wrongNino = "GB751130C"
   val businessId = "XAIS123456789012"
 
   "writes" must {
@@ -99,6 +100,32 @@ class RetrieveBusinessDetailsAuditDetailSpec extends UnitSpec {
                                        |     }
                                        |   ]
                                        |}""".stripMargin)))
+            )
+          )) shouldBe json
+      }
+      "response with errors" in {
+        val json = Json.parse(s"""{
+                                 |  "userType": "Individual",
+                                 |  "nino": "GB751130C",
+                                 |  "X-CorrelationId": "a1e8057e-fbbc-47a8-a8b478d9f015c253",
+                                 |  "response": {
+                                 |      "httpStatus": 400,
+                                 |  "errors": [
+                                 |      {
+                                 |        "errorCode": "FORMAT_NINO"
+                                 |      }]
+                                 |    }
+                                 |}""".stripMargin)
+
+        Json.toJson(
+          RetrieveBusinessDetailsAuditDetail(
+            userType = "Individual",
+            agentReferenceNumber = None,
+            nino = wrongNino,
+            `X-CorrelationId` = "a1e8057e-fbbc-47a8-a8b478d9f015c253",
+            response = AuditResponse(
+              400,
+              Left(Seq(AuditError("FORMAT_NINO")))
             )
           )) shouldBe json
       }
