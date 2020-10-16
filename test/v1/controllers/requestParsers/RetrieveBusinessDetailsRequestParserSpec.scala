@@ -25,7 +25,7 @@ import v1.models.request.retrieveBusinessDetails.{RetrieveBusinessDetailsRawData
 class RetrieveBusinessDetailsRequestParserSpec extends UnitSpec {
 
   private val nino = "AA123456A"
-  private val businessId = "X0IS123456789012"
+  private val businessId = "X0IS12345678910"
   private val data = RetrieveBusinessDetailsRawData(nino, businessId)
   private val invalidSingleData = RetrieveBusinessDetailsRawData(nino, "Walrus")
   private val invalidMultipleData = RetrieveBusinessDetailsRawData("Beans", "Walrus")
